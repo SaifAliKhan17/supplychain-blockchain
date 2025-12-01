@@ -1,0 +1,83 @@
+{
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "string",
+          "name": "productId",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "dataHash",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "submitter",
+          "type": "address"
+        }
+      ],
+      "name": "ProductRegistered",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "productId",
+          "type": "string"
+        }
+      ],
+      "name": "getProductHash",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "dataHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "submitter",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "productId",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "dataHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "registerProduct",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "608060405234801561000f575f80fd5b506104e28061001d5f395ff3fe608060405234801561000f575f80fd5b5060043610610034575f3560e01c8063ed0abd1514610038578063fd0bce0714610054575b5f80fd5b610052600480360381019061004d91906102ee565b610086565b005b61006e6004803603810190610069919061034b565b61019e565b60405161007d939291906103fc565b60405180910390f35b60405180606001604052808281526020014281526020013373ffffffffffffffffffffffffffffffffffffffff168152505f84846040516100c892919061046d565b90815260200160405180910390205f820151815f0155602082015181600101556040820151816002015f6101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055509050503373ffffffffffffffffffffffffffffffffffffffff16838360405161015892919061046d565b60405180910390207f283b5e3dcff94934e38615c0e95a6810e2e5a4f46b4bdc126c30ddfbeb506f568342604051610191929190610485565b60405180910390a3505050565b5f805f805f86866040516101b392919061046d565b90815260200160405180910390206040518060600160405290815f820154815260200160018201548152602001600282015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815250509050805f015181602001518260400151935093509350509250925092565b5f80fd5b5f80fd5b5f80fd5b5f80fd5b5f80fd5b5f8083601f84011261027b5761027a61025a565b5b8235905067ffffffffffffffff8111156102985761029761025e565b5b6020830191508360018202830111156102b4576102b3610262565b5b9250929050565b5f819050919050565b6102cd816102bb565b81146102d7575f80fd5b50565b5f813590506102e8816102c4565b92915050565b5f805f6040848603121561030557610304610252565b5b5f84013567ffffffffffffffff81111561032257610321610256565b5b61032e86828701610266565b93509350506020610341868287016102da565b9150509250925092565b5f806020838503121561036157610360610252565b5b5f83013567ffffffffffffffff81111561037e5761037d610256565b5b61038a85828601610266565b92509250509250929050565b61039f816102bb565b82525050565b5f819050919050565b6103b7816103a5565b82525050565b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f6103e6826103bd565b9050919050565b6103f6816103dc565b82525050565b5f60608201905061040f5f830186610396565b61041c60208301856103ae565b61042960408301846103ed565b949350505050565b5f81905092915050565b828183375f83830152505050565b5f6104548385610431565b935061046183858461043b565b82840190509392505050565b5f610479828486610449565b91508190509392505050565b5f6040820190506104985f830185610396565b6104a560208301846103ae565b939250505056fea2646970667358221220019b8b4fce3f25e0646768973495364d03363eb26b67b888ba695f1614619f1864736f6c63430008140033"
+}

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Product Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background:#f9fafb; }
+    .navbar { background:linear-gradient(90deg,#0d6efd,#6610f2); }
+    .navbar-brand { color:#fff!important; font-weight:600; }
+    .card { border-radius:1rem; box-shadow:0 0 15px rgba(0,0,0,0.08); }
+    .badge { font-size:0.9rem; }
+    code { background:#eef; padding:2px 4px; border-radius:4px; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="/">Blockchain Supply Chain</a>
+      <a href="/" class="btn btn-light">🏠 Home</a>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="card p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">{{ product.name }}</h3>
+        <span class="text-muted">ID: {{ product.product_id }}</span>
+      </div>
+
+      <!-- QR Code -->
+      {% if product.qr_path %}
+      <div class="text-center mb-3">
+        <img src="{{ url_for('static', filename=product.qr_path) }}" width="150" alt="QR Code">
+        <p class="small text-muted">Scan QR to verify authenticity</p>
+      </div>
+      {% endif %}
+
+      <!-- Tamper Status -->
+      {% if tamper_ok %}
+        <div class="alert alert-success">✅ Tamper Check: OK — Data matches blockchain record.</div>
+      {% else %}
+        <div class="alert alert-danger">⚠️ Tamper Check: FAILED — Local data differs from blockchain hash!</div>
+      {% endif %}
+
+      <!-- Product Description -->
+      <h5>Description</h5>
+      <p>{{ product.description }}</p>
+
+      <!-- Hash Information -->
+      <h5>Integrity Data</h5>
+      <p><strong>Local Hash:</strong> <code>{{ local_hash }}</code></p>
+      <p><strong>On-Chain Hash:</strong> <code>{{ onchain_hash }}</code></p>
+      <p><strong>Timestamp:</strong> {{ timestamp }}</p>
+      <p><strong>Recorded By:</strong> {{ submitter }}</p>
+
+      <!-- Anomaly Section -->
+      <h5>Detected Anomalies</h5>
+      {% if anomalies %}
+        <ul>
+          {% for a in anomalies %}
+            <li>⚠️ {{ a }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-success">✅ No anomalies detected in this record.</p>
+      {% endif %}
+
+      <div class="text-end mt-4">
+        <a href="/" class="btn btn-secondary">Back</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center mt-4 text-muted">
+    <p>© 2025 Blockchain Supply Chain | Data Integrity Verified</p>
+  </footer>
+</body>
+</html>
