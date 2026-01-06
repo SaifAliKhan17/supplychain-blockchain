@@ -6,37 +6,401 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+
   <style>
-    body { background: #f9fafb; }
-    .navbar { background: linear-gradient(90deg, #0d6efd, #6610f2); }
-    .navbar-brand { color: white !important; font-weight: 600; }
-    .card { border-radius: 1rem; box-shadow: 0 0 15px rgba(0,0,0,0.08); }
-    .badge { font-size: 0.9rem; }
-    footer { text-align:center; margin-top:2rem; color:#777; }
-  </style>
+  :root {
+    --cs-primary: #1e3a8a;
+    --cs-primary-light: #3b82f6;
+    --cs-primary-dark: #172554;
+
+    --cs-bg: #f8fafc;
+    --cs-surface: #ffffff;
+    --cs-border: #e5e7eb;
+
+    --cs-text: #0f172a;
+    --cs-muted: #64748b;
+
+    --cs-success: #16a34a;
+    --cs-warning: #f59e0b;
+    --cs-danger: #dc2626;
+  }
+
+  body {
+  background: #f8fafc;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont;
+  color: #0f172a;
+  }
+
+
+  .dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+  width: 68px;
+  background: linear-gradient(180deg, #1e3a8a, #2563eb);
+  color: white;
+  padding-top: 1rem;
+  transition: width 0.35s ease;
+  overflow: hidden;
+  box-shadow: 4px 0 20px rgba(30,58,138,0.25);
+}
+
+.sidebar:hover {
+  width: 220px;
+}
+
+.sidebar-brand {
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.side-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  transition: background 0.25s ease;
+}
+
+.side-link:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.side-link .text {
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar:hover .side-link .text {
+  opacity: 1;
+}
+
+/* ===== Main Content ===== */
+.dashboard-content {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+/* ===== Clock Card Styling ===== */
+.clock-card {
+  background: linear-gradient(180deg, #ffffff, #f1f5ff);
+  border-radius: 18px;
+  box-shadow: 0 14px 34px rgba(15,23,42,0.08);
+}
+
+.clock-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.clock-face {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #ffffff 60%, #e0e7ff);
+  border: 6px solid #1e3a8a;
+  position: relative;
+}
+
+/* Hands */
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom;
+  transform: translateX(-50%);
+  border-radius: 4px;
+}
+
+.hour {
+  height: 36px;
+  width: 5px;
+  background: #1e3a8a;
+}
+
+.minute {
+  height: 52px;
+  width: 4px;
+  background: #2563eb;
+}
+
+.second {
+  height: 60px;
+  width: 2px;
+  background: #ef4444;
+}
+
+/* Center Dot */
+.clock-center {
+  width: 10px;
+  height: 10px;
+  background: #1e3a8a;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Digital Time */
+.clock-digital {
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #1e293b;
+}
+
+
+  /* Buttons */
+  .btn-primary {
+    background: var(--cs-primary-light);
+    border: none;
+    box-shadow: 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+
+  .btn-primary:hover {
+    background: var(--cs-primary);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.45);
+  }
+
+  .btn-outline-primary {
+    border-color: var(--cs-primary-light);
+    color: var(--cs-primary-light);
+  }
+
+  .btn-outline-primary:hover {
+    background: var(--cs-primary-light);
+    color: #fff;
+  }
+
+  /* Cards */
+  .card {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 20px 40px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  }
+
+
+  .card:hover {
+    transform: translateY(-2px);
+    transition: 0.25s ease;
+  }
+
+  /* Tables */
+  .table thead th {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  }
+  .table tbody tr {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.06);
+  }
+
+.table tbody tr:hover {
+  transform: scale(1.01);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.12);
+  }
+
+  .table td {
+    vertical-align: middle;
+  }
+
+  /* Badges */
+  .badge {
+  border-radius: 999px;
+  padding: 0.45em 0.75em;
+  font-weight: 500;
+  }
+
+.bg-success {
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.18),
+    rgba(16, 185, 129, 0.18)
+  ) !important;
+  color: #065f46;
+  }
+
+.bg-danger {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.18),
+    rgba(220, 38, 38, 0.18)
+  ) !important;
+  color: #7f1d1d;
+  }
+
+
+  /* Search bar */
+  #searchInput {
+    border-radius: 999px;
+    padding: 0.55rem 1rem;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--cs-muted);
+    font-size: 0.9rem;
+  }
+  * {
+  transition:
+    background-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+  }
+  :focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  }
+  .chart-card {
+  background: linear-gradient(
+    180deg,
+    #ffffff,
+    #f1f5ff
+  );
+  
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.chain-loader {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Each chain link */
+.chain-loader span {
+  width: 18px;
+  height: 10px;
+  border: 3px solid #2563eb;
+  border-radius: 12px;
+  position: relative;
+  animation: chainMove 1.2s ease-in-out infinite;
+  opacity: 0.4;
+}
+
+/* Staggered animation */
+.chain-loader span:nth-child(1) { animation-delay: 0s; }
+.chain-loader span:nth-child(2) { animation-delay: 0.15s; }
+.chain-loader span:nth-child(3) { animation-delay: 0.3s; }
+.chain-loader span:nth-child(4) { animation-delay: 0.45s; }
+
+/* Animation */
+@keyframes chainMove {
+  0% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+}
+
+</style>
 </head>
 <body class="pb-5">
 
-  <!-- 🔹 Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <a class="navbar-brand" href="#">Blockchain Supply Chain</a>
-      <div class="d-flex">
-        <a href="{{ url_for('add') }}" class="btn btn-light me-2">➕ Add Product</a>
-        <a href="{{ url_for('scan_all') }}" class="btn btn-warning me-2">🔍 Integrity Check</a>
-        <a href="{{ url_for('export_csv') }}" class="btn btn-success">📁 Export CSV</a>
-      </div>
-    </div>
-  </nav>
+<!-- ===== Chain Loader ===== -->
+<div id="pageLoader" style="
+  position: fixed;
+  inset: 0;
+  background: rgba(248,250,252,0.92);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+">
 
-  <div class="container mt-4">
+  <div style="text-align:center;">
+
+    <div class="chain-loader">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div style="
+      margin-top: 0.9rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #475569;
+    ">
+      Securing Data
+    </div>
+
+  </div>
+
+</div>
+
+
+  <div class="dashboard-wrapper">
+    <!-- ===== Vertical Sidebar ===== -->
+<div class="sidebar">
+
+  <div class="sidebar-brand">
+    ⛓
+  </div>
+
+  <a href="/" class="side-link">
+    <span class="icon">🏠</span>
+    <span class="text">Dashboard</span>
+  </a>
+
+  <a href="{{ url_for('add') }}" class="side-link">
+    <span class="icon">➕</span>
+    <span class="text">Add Product</span>
+  </a>
+
+  <a href="{{ url_for('scan_all') }}" class="side-link">
+    <span class="icon">✔</span>
+    <span class="text">Integrity Scan</span>
+  </a>
+
+</div>
+
+
+  <div class="dashboard-content">
+    <div class="container-fluid">
     <div class="row">
       <!-- 🔹 Products Table -->
       <div class="col-lg-8">
         <div class="card p-4">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="mb-0">Registered Products</h3>
-            <input id="searchInput" class="form-control w-50" placeholder="🔍 Search products...">
+            <input id="searchInput"
+                  class="form-control w-50"
+                  placeholder="🔍 Search by ID, name, or status">
+
           </div>
 
           <div class="table-responsive">
@@ -96,71 +460,182 @@
       </div>
 
       <!-- 🔹 Right column: Stats Card + Chart -->
-      <div class="col-lg-4">
-        <div class="card p-4 mb-4">
-          <h4 class="text-center">Blockchain Statistics</h4>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item d-flex justify-content-between"><strong>Verified</strong><span class="text-success">{{ stat_ok|default(0) }}</span></li>
-            <li class="list-group-item d-flex justify-content-between"><strong>Tampered</strong><span class="text-danger">{{ stat_failed|default(0) }}</span></li>
-            <li class="list-group-item d-flex justify-content-between"><strong>Anomalies</strong><span class="text-warning">{{ stat_anomaly|default(0) }}</span></li>
-          </ul>
+      <!-- ===== Clock Card ===== -->
+       <div class="col-lg-4">
+  <div class="card clock-card p-4 mb-4">
+
+  <h6 class="text-center mb-3">System Time</h6>
+
+  <div class="clock-wrapper">
+
+    <div class="clock-face">
+      <div class="hand hour" id="hourHand"></div>
+      <div class="hand minute" id="minuteHand"></div>
+      <div class="hand second" id="secondHand"></div>
+      <div class="clock-center"></div>
+    </div>
+
+  </div>
+
+  <div class="clock-digital text-center mt-3" id="digitalTime">
+    --:--:--
+  </div>
+
+  <div class="text-center text-muted small mt-1">
+    Live system monitoring
+  </div>
+
+</div>
+
+
+        <div class="chart-card mt-3" style="height:350px;">
+        <h6 class="text-center mb-3">Integrity Overview</h6>
+        <canvas id="statusChart"></canvas>
         </div>
 
-        <div class="card p-4">
-          <h5 class="text-center mb-3">Integrity Overview</h5>
-          <canvas id="statusChart" width="300" height="300"></canvas>
-        </div>
+
       </div>
     </div>
   </div>
-
   <!-- 🔹 Footer -->
   <footer>
     <p class="mt-4">© 2025 Blockchain Supply Chain | Built with Flask + Web3.py + SQLite</p>
   </footer>
+  </div>
+
 
   <!-- 🔹 Scripts -->
-  <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // Search bar filter (guard if element missing)
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-      searchInput.addEventListener('keyup', function() {
-        const term = this.value.toLowerCase();
-        document.querySelectorAll('tbody tr').forEach(tr => {
-          tr.style.display = tr.innerText.toLowerCase().includes(term) ? '' : 'none';
-        });
-      });
-    }
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-    // Chart.js pie chart (guard if canvas exists)
-    const chartEl = document.getElementById('statusChart');
-    if (chartEl) {
-      const ctx = chartEl.getContext('2d');
-      new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: ['Verified', 'Tampered', 'Anomaly'],
-          datasets: [{
-            data: [
-              {{ stat_ok|default(0) }},
-              {{ stat_failed|default(0) }},
-              {{ stat_anomaly|default(0) }}
-            ],
-            backgroundColor: ['#198754', '#dc3545', '#ffc107'],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          plugins: {
-            legend: { position: 'bottom' },
-            tooltip: { enabled: true }
+  const chartEl = document.getElementById('statusChart');
+  if (!chartEl) {
+    console.error("Chart canvas not found");
+    return;
+  }
+
+  const ctx = chartEl.getContext('2d');
+
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Verified', 'Tampered', 'Anomaly'],
+      datasets: [{
+        data: [
+          {{ stat_ok|default(0) }},
+          {{ stat_failed|default(0) }},
+          {{ stat_anomaly|default(0) }}
+        ],
+        backgroundColor: [
+          'rgba(34,197,94,0.85)',
+          'rgba(239,68,68,0.85)',
+          'rgba(245,158,11,0.85)'
+        ],
+        borderWidth: 0,
+        hoverOffset: 12
+      }]
+    },
+    options: {
+      cutout: '65%',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 16,
+            usePointStyle: true,
+            font: { size: 12 }
           }
+        },
+        tooltip: {
+          backgroundColor: '#0f172a',
+          titleColor: '#fff',
+          bodyColor: '#e5e7eb',
+          padding: 12,
+          cornerRadius: 8
         }
-      });
+      }
     }
   });
-  </script>
+
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const searchInput = document.getElementById("searchInput");
+  const tableRows = document.querySelectorAll("table tbody tr");
+
+  searchInput.addEventListener("keyup", function () {
+    const searchValue = searchInput.value.toLowerCase();
+
+    tableRows.forEach(row => {
+      const rowText = row.innerText.toLowerCase();
+
+      if (rowText.includes(searchValue)) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  });
+
+});
+</script>
+<script>
+function updateClock() {
+  const now = new Date();
+
+  const seconds = now.getSeconds();
+  const minutes = now.getMinutes();
+  const hours = now.getHours();
+
+  document.getElementById("secondHand").style.transform =
+    `translateX(-50%) rotate(${seconds * 6}deg)`;
+
+  document.getElementById("minuteHand").style.transform =
+    `translateX(-50%) rotate(${minutes * 6 + seconds * 0.1}deg)`;
+
+  document.getElementById("hourHand").style.transform =
+    `translateX(-50%) rotate(${(hours % 12) * 30 + minutes * 0.5}deg)`;
+
+  document.getElementById("digitalTime").innerText =
+    now.toLocaleTimeString();
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+
+</div>
+<script>
+  const loader = document.getElementById("pageLoader");
+
+  // Show loader on internal navigation
+  document.addEventListener("click", function (e) {
+    const link = e.target.closest("a");
+    if (!link) return;
+
+    const href = link.getAttribute("href");
+
+    // Ignore empty, anchors, external, new tabs
+    if (
+      !href ||
+      href.startsWith("#") ||
+      href.startsWith("http") ||
+      link.target === "_blank"
+    ) return;
+
+    loader.style.display = "flex";
+  });
+
+  // Hide loader when page finishes loading
+  window.addEventListener("load", function () {
+    loader.style.display = "none";
+  });
+</script>
 
 </body>
 </html>
