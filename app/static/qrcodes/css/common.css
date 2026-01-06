@@ -1,0 +1,51 @@
+/* =========================================
+   Shared Header (Same style as before)
+   ========================================= */
+
+.cs-navbar {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  padding: 1rem 0;
+  box-shadow: 0 10px 30px rgba(30, 58, 138, 0.35);
+}
+
+.cs-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-brand {
+  color: #ffffff !important;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  font-size: 1.25rem;
+}
+
+.cs-tagline {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.nav-link.active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile behavior */
+@media (max-width: 768px) {
+  .nav {
+    margin-top: 0.75rem;
+  }
+}
