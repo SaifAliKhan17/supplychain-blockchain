@@ -33,7 +33,7 @@ def generate_qr(product_id: str):
     import socket
     # Get local IP address automatically (so phone on same Wi-Fi can reach)
     local_ip = socket.gethostbyname(socket.gethostname())
-    url = f"http://{local_ip}:5000/product/{product_id}"
+    url = f"http://{local_ip}:5000/verify/{product_id}"
 
     out_dir = PROJECT_ROOT / 'app' / 'static' / 'qrcodes'
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -153,16 +153,57 @@ def product_detail(product_id):
 
     anomalies = detect_anomalies(None, rec)
 
-    return render_template('product_detail.html',
-                           product=p,
-                           tamper_ok=tamper_ok,
-                           local_hash=local_hash,
-                           onchain_hash=onchain_hash_clean,
-                           timestamp=ts,
-                           submitter=submitter,
-                           anomalies=anomalies)
+    from datetime import datetime
 
+    formatted_ts = None
+    if ts:
+        formatted_ts = datetime.utcfromtimestamp(ts).strftime(
+            "%d %b %Y · %H:%M UTC"
+        )
 
+    return render_template(
+        'product_detail.html',
+        product=p,
+        tamper_ok=tamper_ok,
+        local_hash=local_hash,
+        onchain_hash=onchain_hash_clean,
+        timestamp=formatted_ts,
+        submitter=submitter,
+        anomalies=anomalies
+    )
+
+@app.route('/verify/<product_id>')
+def verify_product(product_id):
+    p = get_product_by_id(session, product_id)
+    if not p:
+        return "Product not found", 404
+
+    try:
+        onchain_hash, ts, submitter = get_onchain_hash(contract, p.product_id)
+    except Exception:
+        onchain_hash, ts, submitter = ("", None, None)
+
+    tamper_ok, local_hash, onchain_hash_clean = check_tamper(
+        onchain_hash,
+        p.metadata_json
+    )
+
+    from datetime import datetime
+    formatted_ts = None
+    if ts:
+        formatted_ts = datetime.utcfromtimestamp(ts).strftime(
+            "%d %b %Y · %H:%M UTC"
+        )
+
+    return render_template(
+        'verify.html',
+        product=p,
+        tamper_ok=tamper_ok,
+        local_hash=local_hash,
+        onchain_hash=onchain_hash_clean,
+        timestamp=formatted_ts,
+        submitter=submitter
+    )
 
 @app.route('/scan_all')
 def scan_all():
